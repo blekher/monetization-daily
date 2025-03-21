@@ -44,6 +44,7 @@ test('Testing Google stable module', async ({}) => {
     await googlePage.navigate();
     await googlePage.selectModule();
     await googlePage.search('rent car');
+    await googlePage.waitForSearchResults();
     await googlePage.closeLocationPopup();
 
    // Search for iframe id="master22""

@@ -1,20 +1,21 @@
+
 export class SearchResultsPage {
     constructor(page) {
         this.page = page;
-        this.targetIframe = page.frameLocator('#master22'); 
     }
 
     async checkForIframe() {
-        // Check iframe id="master22"
-        const iframeLocator = this.page.locator('iframe#master22');
-        const isVisible = await iframeLocator.isVisible({ timeout: 6000 });
+        try {
+            const iframeLocator = this.page.locator('iframe#master22');
 
-        if (isVisible) {
-            console.log('Found iframe with id="master22"');
-            return true;
-        } else {
-            console.error('iframe with id="master22" not found or not visible - TEST FAILED');
-            throw new Error('Iframe with id="master22" not found');
+            await iframeLocator.waitFor({ state: 'attached' });
+
+            await iframeLocator.waitFor({ state: 'visible' });
+
+            console.log('iframe with id="master22" is visible and attached');
+        } catch (error) {
+            console.error('iframe with id="master22" did not appear in time');
+            throw new Error('Iframe with id="master22" not found or not visible');
         }
     }
 }

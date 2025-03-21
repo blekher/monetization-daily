@@ -1,3 +1,5 @@
+import { waitAndClick } from '../utils/helpers.js';
+
 export class GooglePage {
     constructor(page) {
         this.page = page;
@@ -17,14 +19,14 @@ export class GooglePage {
 
     async search(query) {
         await this.searchBox.fill(query);
-        await this.searchButton.click();
-        await this.page.waitForTimeout(3000);
+        await this.page.waitForTimeout(1000);
+        await this.searchBox.press('Enter');
     }
 
     async closeLocationPopup() {
-        if (await this.notNowButton.isVisible()) {
-            await this.notNowButton.click();
-        }
-        await this.page.waitForTimeout(10000);
+        await waitAndClick(this.notNowButton, 1000);
+    }
+    async waitForSearchResults() {
+        await this.page.waitForLoadState('networkidle'); 
     }
 }

@@ -11,6 +11,6 @@ export class ExtensionsPage {
     }
 
     async verifyExtensionInstalled() {
-        await expect(this.extensionTitle).toBeVisible(); // ✅ `expect` is now defined
+        await expect(this.extensionTitle).toBeVisible(); 
     }
 }
