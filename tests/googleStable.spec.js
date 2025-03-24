@@ -1,29 +1,19 @@
-import { test, expect, chromium } from '@playwright/test';
+import { expect, chromium } from '@playwright/test';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { GooglePage } from '../pages/GooglePage.js';
 import { ExtensionsPage } from '../pages/ExtensionsPage.js';
 import { SearchResultsPage } from '../pages/SearchResultsPage.js';
+import { takeNamedScreenshot } from '../utils/helpers.js';
+import { test } from './fixtures.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const extensionPath = path.resolve(__dirname, '../tests/monetization_test');
-
+//const extensionPath = path.resolve(__dirname, '../tests/monetization_test');
 const logFilePath = './network_requests.log';
-const pageScreenshotPath = './page_screenshot.png';
 
-test('Testing Google stable module', async ({}) => {
-    const browser = await chromium.launchPersistentContext('', {
-        headless: false,
-        args: [
-            `--disable-extensions-except=${extensionPath}`,
-            `--load-extension=${extensionPath}`,
-            `--disable-blink-features=AutomationControlled`
-        ]
-    });
-
-    const page = await browser.newPage();
+test('Testing Google stable module', async ({ page }) => {
     const networkLogs = [];
 
     page.on('request', request => {
@@ -50,12 +40,16 @@ test('Testing Google stable module', async ({}) => {
    // Search for iframe id="master22""
     const searchResultsPage = new SearchResultsPage(page);
     await searchResultsPage.checkForIframe();
+    await takeNamedScreenshot(page, 'results-page-1'); // Take a screenshot of the page
+    
+    // Go to the next results page
+    await googlePage.goToSearchPage(2);  
 
-    // Take a screenshot of the page
-    await page.screenshot({ path: pageScreenshotPath, fullPage: true });
-
+    // Search for iframe id="master22""
+    await searchResultsPage.checkForIframe(); 
+    await takeNamedScreenshot(page, 'results-page-2'); // Take a screenshot of the page
+    
     //  Save network requests to file
     fs.writeFileSync(logFilePath, networkLogs.join('\n'), 'utf-8');
-
-    await browser.close();
+    console.log('Browser closed');
 });

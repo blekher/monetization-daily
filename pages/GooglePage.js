@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test';
 import { waitAndClick } from '../utils/helpers.js';
 
 export class GooglePage {
@@ -7,6 +8,7 @@ export class GooglePage {
         this.searchButton = page.getByRole('button', { name: 'Google Search' }).first();
         this.notNowButton = page.getByRole('button', { name: 'Not now' });
         this.selectField = page.locator('#select-field');
+        this.paginationLink = page.locator('a[aria-label="Page 2"]');
     }
 
     async navigate() {
@@ -28,5 +30,16 @@ export class GooglePage {
     }
     async waitForSearchResults() {
         await this.page.waitForLoadState('networkidle'); 
+    }
+
+    async goToSearchPage(n = 2) {
+        const pageLink = this.page.locator(`a[aria-label="Page ${n}"]`);
+    
+        await expect(pageLink).toBeVisible();
+    
+        await pageLink.click();
+    
+        //await this.page.waitForLoadState('networkidle');
+        //await this.page.waitForTimeout(3000);
     }
 }
