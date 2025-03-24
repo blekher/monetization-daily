@@ -2,15 +2,14 @@ import { expect, chromium } from '@playwright/test';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import { GooglePage } from '../pages/GooglePage.js';
-import { ExtensionsPage } from '../pages/ExtensionsPage.js';
-import { SearchResultsPage } from '../pages/SearchResultsPage.js';
+import { GooglePage } from '../pages/googlePage.js';
+import { ExtensionsPage } from '../pages/extensionsPage.js';
+import { SearchResultsPage } from '../pages/searchResultsPage.js';
 import { takeNamedScreenshot } from '../utils/helpers.js';
 import { test } from './fixtures.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-//const extensionPath = path.resolve(__dirname, '../tests/monetization_test');
 const logFilePath = './network_requests.log';
 
 test('Testing Google stable module', async ({ page }) => {
