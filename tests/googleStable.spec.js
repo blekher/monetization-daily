@@ -1,16 +1,11 @@
-import { expect, chromium } from '@playwright/test';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
+import { expect } from '@playwright/test';
 import { GooglePage } from '../pages/googlePage.js';
 import { ExtensionsPage } from '../pages/extensionsPage.js';
 import { SearchResultsPage } from '../pages/searchResultsPage.js';
-import { takeNamedScreenshot } from '../utils/helpers.js';
+import { takeFullPageScreenshot, saveNetworkLogs } from '../utils/helpers.js';
 import { test } from './fixtures.js';
+import { testData } from './testData.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const logFilePath = './network_requests.log';
 
 test('Testing Google stable module', async ({ page }) => {
     const networkLogs = [];
@@ -23,32 +18,47 @@ test('Testing Google stable module', async ({ page }) => {
         networkLogs.push(`Response: ${response.status()} ${response.url()}`);
     });
 
-    // Check if the extension is installed
-    const extensionsPage = new ExtensionsPage(page);
-    await extensionsPage.navigate();
-    await extensionsPage.verifyExtensionInstalled();
+    await test.step('Verify extension is installed', async () => {
+        const extensionsPage = new ExtensionsPage(page);
+        await extensionsPage.navigate();
+        await extensionsPage.verifyExtensionInstalled();
+    });
 
-    // Navigate to Google
-    const googlePage = new GooglePage(page);
-    await googlePage.navigate();
-    await googlePage.selectModule();
-    await googlePage.search('rent car');
-    await googlePage.waitForSearchResults();
-    await googlePage.closeLocationPopup();
+    await test.step('Search on Google and validate iframe on page 1', async () => {
+        const googlePage = new GooglePage(page);
+        const searchResultsPage = new SearchResultsPage(page);
 
-   // Search for iframe id="master22""
-    const searchResultsPage = new SearchResultsPage(page);
-    await searchResultsPage.checkForIframe();
-    await takeNamedScreenshot(page, 'results-page-1'); // Take a screenshot of the page
-    
-    // Go to the next results page
-    await googlePage.goToSearchPage(2);  
+        await googlePage.navigate();
+        await googlePage.selectModule();
+        await googlePage.search(testData.searchQuery);
+        await googlePage.waitForSearchResults();
+        await googlePage.closeLocationPopup();
 
-    // Search for iframe id="master22""
-    await searchResultsPage.checkForIframe(); 
-    await takeNamedScreenshot(page, 'results-page-2'); // Take a screenshot of the page
-    
-    //  Save network requests to file
-    fs.writeFileSync(logFilePath, networkLogs.join('\n'), 'utf-8');
+        const isIframeValid = await searchResultsPage.validateIframe();
+        if (!isIframeValid) {
+            throw new Error('iframe#master22 failed validation on page 1');
+        }
+
+        await takeFullPageScreenshot(page, testData.screenshots.page1);
+    });
+
+    await test.step('Go to page 2 and validate iframe', async () => {
+        const googlePage = new GooglePage(page);
+        const searchResultsPage = new SearchResultsPage(page);
+
+        await googlePage.goToSearchPage(2);
+
+        const isIframeValid2 = await searchResultsPage.validateIframe();
+        if (!isIframeValid2) {
+            throw new Error('iframe#master22 failed validation on page 2');
+        }
+
+        await takeFullPageScreenshot(page, testData.screenshots.page2);
+    });
+
+    await test.step('Save network logs', async () => {
+        saveNetworkLogs(networkLogs, testData.logFilePath);
+    });
+
     console.log('Browser closed');
 });
