@@ -1,0 +1,27 @@
+{
+  "src": "https://fivem.com.tr/gsearch/results_skpa.html?q=rent%20car&gsc.page=1&frmid=master22-frame",
+  "sandbox": null,
+  "referrerPolicy": "no-referrer",
+  "allow": null,
+  "className": null,
+  "title": null,
+  "position": {
+    "x": 91,
+    "y": 266
+  },
+  "size": {
+    "width": 652,
+    "height": 128
+  },
+  "styles": {
+    "display": "block",
+    "visibility": "visible",
+    "opacity": "1",
+    "zIndex": "99",
+    "position": "absolute",
+    "pointerEvents": "auto"
+  },
+  "intersectionRatio": 1,
+  "firstIframeId": "master22",
+  "isFirst": true
+}

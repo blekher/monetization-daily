@@ -13,10 +13,11 @@ export const test = base.extend({
     const context = await chromium.launchPersistentContext('', {
       headless: false,
       args: [
+        '--start-maximized',
         `--disable-extensions-except=${extensionPath}`,
         `--load-extension=${extensionPath}`,
-        `--disable-blink-features=AutomationControlled`
-      ]
+        '--disable-blink-features=AutomationControlled'
+      ],
     });
 
     await use(context);
