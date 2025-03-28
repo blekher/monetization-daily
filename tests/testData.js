@@ -1,5 +1,5 @@
 export const testData = {
-  searchQuery: "rent car",
+  searchQuery: "rent bike",
   extensionName: "Prod check monetization",
   logFilePath: "./network_requests.log",
   screenshots: {

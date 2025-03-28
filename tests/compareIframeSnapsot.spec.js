@@ -1,43 +1,38 @@
-import fs from 'fs';
-import path from 'path';
 import { test, expect } from '@playwright/test';
+import path from 'path';
+import { testData } from './testData.js';
+import { loadSnapshot, generateSnapshotReport } from '../utils/helpers.js';
 
-// Utility to compare numbers with a pixel tolerance
-function compareWithTolerance(actual, expected, tolerance = 1) {
-  const diffs = [];
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
-  for (const key in expected) {
-    if (typeof expected[key] === 'number') {
-      const diff = Math.abs(expected[key] - actual[key]);
-      if (diff > tolerance) {
-        diffs.push(`✗ ${key}: expected ${expected[key]}, got ${actual[key]}`);
-      }
-    } else if (typeof expected[key] === 'object' && expected[key] !== null) {
-      const nestedDiffs = compareWithTolerance(actual[key], expected[key], tolerance);
-      nestedDiffs.forEach(d => diffs.push(`${key}.${d}`));
-    } else {
-      if (actual[key] !== expected[key]) {
-        diffs.push(`✗ ${key}: expected ${expected[key]}, got ${actual[key]}`);
-      }
-    }
-  }
-
-  return diffs;
+function snapshotPath(type, pageNumber) {
+  return path.resolve(__dirname, `../snapshots/${type}/iframe-page-${pageNumber}.json`);
 }
 
-test('Compare iframe JSON snapshot with tolerance', async () => {
-  const actualPath = path.resolve('./snapshots/iframe-details/iframe-page-1.json');
-  const expectedPath = path.resolve('./snapshots/expected/iframe-page-1.json');
+test.describe('Compare iframe snapshots from page 1 and page 2', () => {
+  test('Page 1 snapshot matches expected', async () => {
+    const expected = loadSnapshot(snapshotPath('expected', 1));
+    const actual = loadSnapshot(snapshotPath('actual', 1));
+    const report = generateSnapshotReport(expected, actual, testData.searchQuery);
 
-  const actual = JSON.parse(fs.readFileSync(actualPath, 'utf-8'));
-  const expected = JSON.parse(fs.readFileSync(expectedPath, 'utf-8'));
+    if (!report.passed) {
+      console.error('❗ Differences found on page 1:');
+      report.diffs.forEach(diff => console.error('-', diff));
+    }
 
-  const diffs = compareWithTolerance(actual, expected, 1);
+    expect(report.passed, 'Snapshot comparison failed on page 1').toBe(true);
+  });
 
-  if (diffs.length > 0) {
-    console.error('Differences found:');
-    diffs.forEach(diff => console.error(diff));
-  }
+  test('Page 2 snapshot matches expected', async () => {
+    const expected = loadSnapshot(snapshotPath('expected', 2));
+    const actual = loadSnapshot(snapshotPath('actual', 2));
+    const report = generateSnapshotReport(expected, actual, testData.searchQuery);
 
-  expect(diffs.length).toBe(0);
+    if (!report.passed) {
+      console.error('❗ Differences found on page 2:');
+      report.diffs.forEach(diff => console.error('-', diff));
+    }
+
+    expect(report.passed, 'Snapshot comparison failed on page 2').toBe(true);
+  });
 });
