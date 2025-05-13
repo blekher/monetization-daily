@@ -65,15 +65,6 @@ test('CheckHoverOnAds', { timeout: 120000 }, async ({ page }, testInfo) => {
       console.log('Back to Search Result page');
     });
 
-    // await searchResultsPage.clickMapsButton();
-    // console.log('Go to maps tab');
-    // await searchResultsPage.frameIsMissing();
-    // console.log('frame is not found in maps tab');
-    // // await searchResultsPage.backToSearchResult();
-    // //////////////////////////////////////////////
-    // await searchResultsPage.clickMapsInSameTab();
-    // console.log('Back to Search Result page');
-
     await test.step('Check iframe in ShortVideos tab', async () => {
       await searchResultsPage.clickShortVideosButton();
       console.log('Go to short videos tab');
@@ -92,7 +83,7 @@ test('CheckHoverOnAds', { timeout: 120000 }, async ({ page }, testInfo) => {
       console.log('Back to Search Result page');
     });
 
-    await test.step('Check iframe in Forums tab', async () => {
+    await test.step('Check iframe in Books tab', async () => {
       await searchResultsPage.clickBooksButton();
       console.log('Go to books tab');
       await searchResultsPage.frameIsMissing();
@@ -101,7 +92,7 @@ test('CheckHoverOnAds', { timeout: 120000 }, async ({ page }, testInfo) => {
       console.log('Back to Search Result page');
     });
 
-    await test.step('Check iframe in Forums tab', async () => {
+    await test.step('Check iframe in Videos tab', async () => {
       await searchResultsPage.clickVideosButton();
       console.log('Go to videos tab');
       await searchResultsPage.frameIsMissing();
@@ -109,6 +100,11 @@ test('CheckHoverOnAds', { timeout: 120000 }, async ({ page }, testInfo) => {
       await searchResultsPage.backToSearchResult();
       console.log('Back to Search Result page');
     });
+
+    await searchResultsPage.clickMapsButton();
+    console.log('Go to maps tab');
+    await searchResultsPage.frameIsMissing();
+    console.log('frame is not found in maps tab');
 
     /////////////////////////////////////////
 
