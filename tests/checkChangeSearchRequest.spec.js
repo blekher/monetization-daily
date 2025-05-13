@@ -44,12 +44,11 @@ test('CheckHoverOnAds', { timeout: 120000 }, async ({ page }, testInfo) => {
     });
 
     await test.step('Check change search request', async () => {
-      const newSearchRequest = "rent car";
-      await googlePage.search(newSearchRequest);
+      await googlePage.search(testData.searchQueryCar);
       await googlePage.waitForSearchResults();
       const raw = await searchResultsPage.getSearchParamsInUrl();
       const decoded = decodeURIComponent(raw);
-      expect(decoded).toBe(newSearchRequest);
+      expect(decoded).toBe(testData.searchQueryCar);
     });
 
   } catch (error) {
