@@ -37,8 +37,7 @@ test('CheckHoverOnAds', { timeout: 120000 }, async ({ page }, testInfo) => {
       console.log('✅ Search completed');
     });
 
-    /////////////////////////////////////////////
-    await test.step('Check iframe in shopping tab', async () => {
+    await test.step('Check iframe in Shopping tab', async () => {
       await searchResultsPage.clickShoppingButton();
       console.log('Go to shopping tab');
       await searchResultsPage.frameIsMissing();
@@ -101,12 +100,12 @@ test('CheckHoverOnAds', { timeout: 120000 }, async ({ page }, testInfo) => {
       console.log('Back to Search Result page');
     });
 
-    await searchResultsPage.clickMapsButton();
-    console.log('Go to maps tab');
-    await searchResultsPage.frameIsMissing();
-    console.log('frame is not found in maps tab');
-
-    /////////////////////////////////////////
+    await test.step('Check iframe in Maps tab', async () => {
+      await searchResultsPage.clickMapsButton();
+      console.log('Go to maps tab');
+      await searchResultsPage.frameIsMissing();
+      console.log('frame is not found in maps tab');
+    });
 
   } catch (error) {
     console.error('❌ Test failed:', error);
