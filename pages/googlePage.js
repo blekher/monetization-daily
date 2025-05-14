@@ -39,21 +39,29 @@ export class GooglePage {
   async search(query) {
     try {
       // Wait for search box to be visible and ready
-      await this.searchBox.waitFor({ state: "visible", timeout: 10000 });
-      await this.page.waitForTimeout(1000);
+      // await this.searchBox.waitFor({ state: "visible", timeout: 10000 });
+      // await this.page.waitForTimeout(1000);
 
-      // Clear any existing text
-      await this.searchBox.click();
-      await this.searchBox.fill("");
-      await this.page.waitForTimeout(500);
+      // // Clear any existing text
+      // await this.searchBox.click();
+      // await this.searchBox.fill("");
+      // await this.page.waitForTimeout(500);
 
-      // Type the search query
+      // // Type the search query
+      // await this.searchBox.fill(query);
+      // await this.page.waitForTimeout(1000);
+
+      // // Press Enter
+      // await this.searchBox.press("Enter");
+      // await this.page.waitForTimeout(1000);
+
+      await this.searchBox.waitFor({ state: 'visible', timeout: 10000 });
+
       await this.searchBox.fill(query);
-      await this.page.waitForTimeout(1000);
-
-      // Press Enter
-      await this.searchBox.press("Enter");
-      await this.page.waitForTimeout(1000);
+      await Promise.all([
+        this.page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+        this.searchBox.press('Enter'),
+      ]);
     } catch (error) {
       console.error("Error during search:", error);
       throw error;

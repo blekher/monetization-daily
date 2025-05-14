@@ -25,7 +25,7 @@ test('Checking the presence of monetization iframes on the "All" and "Web" tabs.
             console.log('🌐 Navigating to Google...');
             await googlePage.navigate();
             console.log('🤖 Simulating human behavior...');
-            // await simulateHumanBehavior(page);
+            await simulateHumanBehavior(page);
           });
 
           await test.step('Perform Google search', async () => {

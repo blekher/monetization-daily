@@ -25,7 +25,7 @@ test('Check hover on ads', { timeout: 120000 }, async ({ page }, testInfo) => {
             console.log('🌐 Navigating to Google...');
             await googlePage.navigate();
             console.log('🤖 Simulating human behavior...');
-            // await simulateHumanBehavior(page);
+            await simulateHumanBehavior(page);
           });
 
           await test.step('Perform Google search', async () => {

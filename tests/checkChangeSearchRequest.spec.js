@@ -43,14 +43,23 @@ test('Checking iframe URL changes after search query changes', { timeout: 120000
       expect(decoded).toBe(testData.searchQuery);
     });
 
+    // await test.step('Check change search request', async () => {
+    //   await googlePage.search(testData.searchQueryCar);
+    //   await googlePage.waitForSearchResults();
+    //   const raw = await searchResultsPage.getSearchParamsInUrl();
+    //   const decoded = decodeURIComponent(raw);
+    //   expect(decoded).toBe(testData.searchQueryCar);
+    //   await expect(googlePage.searchBox).toHaveValue(testData.searchQueryCar);
+    // });
+
     await test.step('Check change search request', async () => {
       await googlePage.search(testData.searchQueryCar);
-      await googlePage.waitForSearchResults();
       const raw = await searchResultsPage.getSearchParamsInUrl();
       const decoded = decodeURIComponent(raw);
       expect(decoded).toBe(testData.searchQueryCar);
-      expect(googlePage.searchBox).toHaveValue(testData.searchQueryCar);
+      await expect(googlePage.searchBox).toHaveValue(testData.searchQueryCar);
     });
+    
 
   } catch (error) {
     console.error('❌ Test failed:', error);
