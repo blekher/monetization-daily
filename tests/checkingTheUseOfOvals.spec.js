@@ -12,7 +12,7 @@ import {
   simulateHumanBehavior
 } from '../utils/helpers.js';
 
-test('Checking iframe URL changes after search query changes', { timeout: 120000 }, async ({ page }, testInfo) => {
+test('Check the change in the search query after applying ovals.', { timeout: 120000 }, async ({ page }, testInfo) => {
   console.log('⏱ Test started...');
   const startTime = Date.now();
 
@@ -31,7 +31,7 @@ test('Checking iframe URL changes after search query changes', { timeout: 120000
     await test.step('Perform Google search', async () => {
       console.log('🔍 Performing search...');
       await googlePage.selectModule();
-      await googlePage.search(testData.searchQuery);
+      await googlePage.search(testData.searchQueryCarFlorida);
       await googlePage.waitForSearchResults();
       await googlePage.closeLocationPopup();
       console.log('✅ Search completed');
@@ -40,16 +40,21 @@ test('Checking iframe URL changes after search query changes', { timeout: 120000
     await test.step('Check iframe URL', async () => {
       const raw = await searchResultsPage.getSearchParamsInUrl();
       const decoded = decodeURIComponent(raw);
-      expect(decoded).toBe(testData.searchQuery);
+      expect(decoded).toBe(testData.searchQueryCarFlorida);
+    });
+
+    await test.step('Click first oval button', async () => {
+      await searchResultsPage.clickFirstOvalButton();
     });
 
     await test.step('Check change search request', async () => {
-      await googlePage.search(testData.searchQueryCar);
-      await googlePage.waitForSearchResults();
+      const searchBoxValue = await searchResultsPage.searchBox.inputValue();
+      console.log('Текст в полі пошуку:', searchBoxValue);
+    
+      const newSearchRequest = `${searchBoxValue}`;
       const raw = await searchResultsPage.getSearchParamsInUrl();
       const decoded = decodeURIComponent(raw);
-      expect(decoded).toBe(testData.searchQueryCar);
-      expect(googlePage.searchBox).toHaveValue(testData.searchQueryCar);
+      expect(decoded).toBe(newSearchRequest);
     });
 
   } catch (error) {

@@ -15,6 +15,8 @@ export class SearchResultsPage {
     this.forumsButton = page.getByRole("link", { name: "Forums" });
     this.booksButton = page.getByRole("link", { name: "Books" });
     this.videosButton = page.getByRole("link", { name: "Videos" }).first();
+    this.firstOvalButton = page.locator('[role="list"]').nth(1).locator('[role="listitem"] a').first();
+    this.searchBox = page.getByRole("combobox", { name: "Search" });
   }
 
   async initAdsTitleLocator() {
@@ -200,6 +202,14 @@ export class SearchResultsPage {
     }
   };
 
+  async clickFirstOvalButton() {
+    try {
+      await waitAndClick(this.firstOvalButton, 10000);
+    } catch (error) {
+      console.log("Error clicking on the first oval button");
+    }
+  };
+
   async getSearchParamsInUrl() {
     const iframeLocator = this.page.locator("iframe#master22");
     const iframeSrc = await iframeLocator.getAttribute('src') || '';
@@ -320,4 +330,6 @@ export class SearchResultsPage {
     console.log(`- First iframe ID on page: ${firstIframeId}`);
     console.log(`- Is first: ${isFirst}`);
   }
+
+
 }

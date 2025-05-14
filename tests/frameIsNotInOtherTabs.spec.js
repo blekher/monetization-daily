@@ -12,7 +12,8 @@ import {
   simulateHumanBehavior
 } from '../utils/helpers.js';
 
-test('CheckHoverOnAds', { timeout: 120000 }, async ({ page }, testInfo) => {
+test('Check for the absence of iframe monetization on the "Images", "Maps", "Short videos", "Videos", "News", "Shopping", "Forums", "Books" tabs.', 
+  { timeout: 120000 }, async ({ page }, testInfo) => {
   console.log('⏱ Test started...');
   const startTime = Date.now();
 

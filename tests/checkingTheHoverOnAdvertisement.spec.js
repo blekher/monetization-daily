@@ -12,7 +12,7 @@ import {
   simulateHumanBehavior
 } from '../utils/helpers.js';
 
-test('CheckHoverOnAds', { timeout: 120000 }, async ({ page }, testInfo) => {
+test('Check hover on ads', { timeout: 120000 }, async ({ page }, testInfo) => {
     console.log('⏱ Test started...');
     const startTime = Date.now();
   
