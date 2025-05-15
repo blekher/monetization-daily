@@ -136,8 +136,22 @@ export class SearchResultsPage {
   };
 
   async backToSearchResult() {
-    await this.page.goBack();
-  };
+    await Promise.all([
+      this.page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      this.page.goBack(),
+    ]);
+  }
+
+  // async backToSearchResult() {
+  //   await this.page.goBack();
+  // };
+
+  async goForwardInHistory() {
+    await Promise.all([
+      this.page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      this.page.goForward(),
+    ]);
+  }
 
   async clickImagesButton() {
     try {
