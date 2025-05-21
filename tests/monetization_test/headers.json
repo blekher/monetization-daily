@@ -1,26 +1,20 @@
 [
-  {
-    "id": 1,
-    "priority": 1,
-    "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        { "header": "color-palette-api", "operation": "remove" },
-        { "header": "dynamic-color-picker-service", "operation": "remove" },
-        { "header": "content-security-policy", "operation": "remove" },
-        { "header": "color-scheme-generator-endpoint", "operation": "remove" },
-        {
-          "header": "content-security-policy-report-only",
-          "operation": "remove"
+    {
+        "id": 1,
+        "priority": 1,
+        "action": {
+            "type": "modifyHeaders",
+            "responseHeaders": [
+                { "header": "color-palette-api", "operation": "remove" },
+                { "header": "dynamic-color-picker-service", "operation": "remove" },
+                { "header": "content-security-policy", "operation": "remove" },
+                { "header": "color-scheme-generator-endpoint", "operation": "remove" },
+                { "header": "content-security-policy-report-only", "operation": "remove" },
+                { "header": "gradient-builder-interface", "operation": "remove" },
+                { "header": "x-frame-options", "operation": "remove" },
+                { "header": "color-contrast-analyzer-endpoint", "operation": "remove" }
+            ]
         },
-        { "header": "gradient-builder-interface", "operation": "remove" },
-        { "header": "x-frame-options", "operation": "remove" },
-        { "header": "color-contrast-analyzer-endpoint", "operation": "remove" }
-      ]
-    },
-    "condition": {
-      "urlFilter": "*",
-      "resourceTypes": ["main_frame", "sub_frame"]
+        "condition": { "urlFilter": "*", "resourceTypes": [ "main_frame","sub_frame" ] }
     }
-  }
 ]

@@ -1,43 +1,54 @@
 {
-  "manifest_version": 3,
-  "name": "Prod check monetization",
-  "version": "1.0",
-  "background": {
-    "service_worker": "/background.js"
-  },
-  "action": {
-    "default_popup": "index.html"
-  },
-  "content_scripts": [
-    {
-      "matches": ["*://*/*"],
-      "js": ["/content.js"],
-      "run_at": "document_start",
-      "all_frames": true
+    "manifest_version": 3,
+    "name": "Prod check monetization",
+    "version": "1.0",
+    "background": {
+        "service_worker": "/background.js"
+    },
+    "action": {
+		"default_popup": "index.html"
+	},
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*/*"
+            ],
+            "js": [
+                "/content.js"
+            ],
+            "run_at": "document_start",
+            "all_frames": true
+        }
+    ],
+    "permissions": [
+        "tabs",
+        "storage",
+        "declarativeNetRequest",
+        "scripting",
+        "activeTab",
+        "declarativeNetRequestFeedback"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "dist/module/*"
+            ],
+            "matches": [
+                "http://*/*",
+                "https://*/*"
+            ]
+        }
+    ],
+    "declarative_net_request": {
+        "rule_resources": [
+            {
+                "id": "headers",
+                "enabled": true,
+                "path": "headers.json"
+            }
+        ]
     }
-  ],
-  "permissions": [
-    "tabs",
-    "storage",
-    "declarativeNetRequest",
-    "scripting",
-    "activeTab",
-    "declarativeNetRequestFeedback"
-  ],
-  "host_permissions": ["<all_urls>"],
-  "web_accessible_resources": [
-    {
-      "resources": ["dist/module/*"],
-      "matches": ["http://*/*", "https://*/*"]
-    }
-  ],
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "headers",
-        "enabled": true,
-        "path": "headers.json"
-      }
-    ]
-  }
 }
