@@ -1,16 +1,16 @@
-import { test } from './fixtures.js';
+import { test } from '../fixtures.js';
 import { expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
-import { GooglePage } from '../pages/googlePage.js';
-import { SearchResultsPage } from '../pages/searchResultsPage.js';
-import { testData } from './testData.js';
+import { GooglePage } from '../../pages/googlePage.js';
+import { SearchResultsPage } from '../../pages/searchResultsPage.js';
+import { testData } from '../testData.js';
 import {
     getIframeContent,
     extractAdsData,
     extractMatchingSearchResults,
     simulateHumanBehavior
-} from '../utils/helpers.js';
+} from '../../utils/helpers.js';
 
 test('Checking the validity of a search query when navigating through history with arrows', { timeout: 120000 }, async ({ page }, testInfo) => {
     console.log('⏱ Test started...');

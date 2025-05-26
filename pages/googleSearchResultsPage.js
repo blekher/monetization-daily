@@ -1,9 +1,10 @@
 import { expect } from '@playwright/test';
-import { waitAndClick } from '../utils/helpers';
-export class SearchResultsPage {
+import { waitAndClick } from '../utils/helpers.js';
+import { GooglePage } from "./googlePage.js";
+export class GoogleSearchResultsPage {
   constructor(page) {
     this.page = page;
-    this.iframe = page.locator("iframe#master22");
+    // this.iframe = page.locator("iframe#master22");
     this.moreButton = page.locator('g-popup:has-text("More")');
     // this.webButton = page.locator('g-popup:visible >> text=Web');
     this.webButton = page.getByRole("link", { name: "Web" }).first();
@@ -17,6 +18,7 @@ export class SearchResultsPage {
     this.videosButton = page.getByRole("link", { name: "Videos" }).first();
     this.firstOvalButton = page.locator('[role="list"]').nth(1).locator('[role="listitem"] a').first();
     this.searchBox = page.getByRole("combobox", { name: "Search" });
+    this.googlePage = new GooglePage(page);
   }
 
   async initAdsTitleLocator() {
@@ -64,6 +66,7 @@ export class SearchResultsPage {
   }
 
   async hoverAdsTitle() {
+    for (const frame of this.page.frames()) {
     if (!this.adsTitleLocator) {
       await this.initAdsTitleLocator();
     }
@@ -71,8 +74,11 @@ export class SearchResultsPage {
     await this.adsTitleLocator.hover();
     await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
   }
+    throw new Error('Error hover to title');
+  }
 
   async hoverAdsFavicon() {
+    for (const frame of this.page.frames()) {
     if (!this.adsFaviconLocator) {
       await this.initAdsFaviconLocator();
     }
@@ -80,8 +86,11 @@ export class SearchResultsPage {
     await this.adsFaviconLocator.hover();
     await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
   }
+    throw new Error('Error hover to Favicon');
+  }
 
   async hoverAdsFaviconTitle() {
+    for (const frame of this.page.frames()) {
     if (!this.adsFaviconTitleLocator) {
       await this.initAdsFaviconTitleLocator();
     }
@@ -89,8 +98,11 @@ export class SearchResultsPage {
     await this.adsFaviconTitleLocator.hover();
     await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
   }
+    throw new Error('Error hover to Favicon title');
+  }
 
   async hoverAdsFaviconDomain() {
+    for (const frame of this.page.frames()) {
     if (!this.adsFaviconDomainLocator) {
       await this.initAdsFaviconDomainLocator();
     }
@@ -98,10 +110,17 @@ export class SearchResultsPage {
     await this.adsFaviconDomainLocator.hover();
     await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
   }
+    throw new Error('Error hover to Favicon domain');
+  }
 
   async clickMoreButton() {
     try {
-      await waitAndClick(this.moreButton, 10000);
+      // await this.moreButton.waitFor({ state: 'attached' });
+      // await this.moreButton.waitFor({ state: 'visible' });
+      // await waitAndClick(this.moreButton, 10000);
+      if (await this.moreButton.isVisible()) {
+        await waitAndClick(this.moreButton);
+      }
     } catch (error) {
       console.log("Error clicking on the more button");
     }
@@ -109,7 +128,9 @@ export class SearchResultsPage {
 
   async clickWebButton() {
     try {
-      await waitAndClick(this.webButton, 10000);
+      await this.webButton.waitFor({ state: 'attached' });
+      await this.webButton.waitFor({ state: 'visible' });
+      await waitAndClick(this.webButton);
     } catch (error) {
       console.log("Error clicking on the web button")
     }
@@ -128,7 +149,9 @@ export class SearchResultsPage {
 
   async clickShoppingButton() {
     try {
-      await waitAndClick(this.moreButton, 5000);
+      await this.clickMoreButton();
+      await this.shoppingButton.waitFor({ state: 'attached' });
+      await this.shoppingButton.waitFor({ state: 'visible' });
       await waitAndClick(this.shoppingButton, 5000);
     } catch (error) {
       console.log("Error clicking on the shopping button");
@@ -155,7 +178,9 @@ export class SearchResultsPage {
 
   async clickImagesButton() {
     try {
-      await waitAndClick(this.moreButton, 5000);
+      await this.clickMoreButton();
+      await this.imagesButton.waitFor({ state: 'attached' });
+      await this.imagesButton.waitFor({ state: 'visible' });
       await waitAndClick(this.imagesButton, 5000);
     } catch (error) {
       console.log("Error clicking on the images button");
@@ -164,7 +189,9 @@ export class SearchResultsPage {
 
   async clickNewsButton() {
     try {
-      await waitAndClick(this.moreButton, 5000);
+      await this.clickMoreButton();
+      await this.newsButton.waitFor({ state: 'attached' });
+      await this.newsButton.waitFor({ state: 'visible' });
       await waitAndClick(this.newsButton, 5000);
     } catch (error) {
       console.log("Error clicking on the news button");
@@ -173,7 +200,9 @@ export class SearchResultsPage {
 
   async clickMapsButton() {
     try {
-      await waitAndClick(this.moreButton, 5000);
+      await this.clickMoreButton();
+      await this.mapsButton.waitFor({ state: 'attached' });
+      await this.mapsButton.waitFor({ state: 'visible' });
       await waitAndClick(this.mapsButton, 5000);
     } catch (error) {
       console.log("Error clicking on the maps button");
@@ -182,7 +211,9 @@ export class SearchResultsPage {
 
   async clickShortVideosButton() {
     try {
-      await waitAndClick(this.moreButton, 5000);
+      await this.clickMoreButton();
+      await this.shortVideosButton.waitFor({ state: 'attached' });
+      await this.shortVideosButton.waitFor({ state: 'visible' });
       await waitAndClick(this.shortVideosButton, 5000);
     } catch (error) {
       console.log("Error clicking on the short videos button");
@@ -191,7 +222,9 @@ export class SearchResultsPage {
 
   async clickForumsButton() {
     try {
-      await waitAndClick(this.moreButton, 5000);
+      await this.clickMoreButton();
+      await this.forumsButton.waitFor({ state: 'attached' });
+      await this.forumsButton.waitFor({ state: 'visible' });
       await waitAndClick(this.forumsButton, 5000);
     } catch (error) {
       console.log("Error clicking on the forums button");
@@ -200,7 +233,9 @@ export class SearchResultsPage {
 
   async clickBooksButton() {
     try {
-      await waitAndClick(this.moreButton, 5000);
+      await this.clickMoreButton();
+      await this.booksButton.waitFor({ state: 'attached' });
+      await this.booksButton.waitFor({ state: 'visible' });
       await waitAndClick(this.booksButton, 5000);
     } catch (error) {
       console.log("Error clicking on the books button");
@@ -209,7 +244,9 @@ export class SearchResultsPage {
 
   async clickVideosButton() {
     try {
-      await waitAndClick(this.moreButton, 5000);
+      await this.clickMoreButton();
+      await this.booksButton.waitFor({ state: 'attached' });
+      await this.booksButton.waitFor({ state: 'visible' });
       await waitAndClick(this.videosButton, 5000);
     } catch (error) {
       console.log("Error clicking on the videos button");
@@ -218,6 +255,8 @@ export class SearchResultsPage {
 
   async clickFirstOvalButton() {
     try {
+      await this.firstOvalButton.waitFor({ state: 'attached' });
+      await this.firstOvalButton.waitFor({ state: 'visible' });
       await waitAndClick(this.firstOvalButton, 10000);
     } catch (error) {
       console.log("Error clicking on the first oval button");
@@ -255,6 +294,35 @@ export class SearchResultsPage {
       return false;
     }
   }
+//////////////////////////////////////////////////////
+
+async getCurrentPageType() {
+    const url = await this.page.url();
+    const params = new URLSearchParams(new URL(url).search);
+    const tbm = params.get('tbm');
+    const udm = params.get('udm');
+
+    switch (tbm) {
+      case 'nws':  return 'News';
+      case 'vid':  return 'Videos';
+      case 'bks':  return 'Books';
+      case 'lcl':  return 'Locations';
+      case 'shop': return 'Shopping';
+      default:
+        switch (udm) {
+          case '2':  return 'Images';
+          case '7':  return 'Videos';
+          case '8':  return 'Jobs';
+          case '14': return 'Web';
+          case '18': return 'Forums';
+          case '28': return 'Shopping';
+          case '36': return 'Books';
+          default:   return 'All';
+        }
+    }
+  }
+
+///////////////////////////////////////////////////////////////
 
   async logIframeMetrics() {
     const iframe = this.page.locator("iframe#master22");

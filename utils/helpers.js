@@ -59,8 +59,13 @@ export function saveNetworkLogs(logs, filename = "./network_requests.log") {
 /**
  * Collects and saves detailed iframe#master22 info to a JSON file
  */
-export async function saveIframeDetailsToFile(page, filename = 'iframe-snapshot.json') {
-  const iframeLocator = page.locator('iframe#master22');
+
+/**
+   * @param {import('@playwright/test').Page} page
+   * @param {string} iframeId
+   */
+export async function saveIframeDetailsToFile(page, filename = 'iframe-snapshot.json', iframeId) {
+  const iframeLocator = page.locator(`iframe#${iframeId}`);
   const elementHandle = await iframeLocator.elementHandle();
 
   await iframeLocator.waitFor({ state: 'attached' });

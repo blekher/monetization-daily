@@ -2,8 +2,15 @@ import { expect } from "@playwright/test";
 import { waitAndClick } from "../utils/helpers.js";
 
 export class GooglePage {
-  constructor(page) {
+  /**
+   * @param {import('@playwright/test').Page} page
+   * @param {string} moduleName — наприклад "yahoo_stable"
+   * @param {string} iframeId — наприклад "privatelayer"
+   */
+  constructor(page, moduleName, iframeId) {
     this.page = page;
+    this.moduleName = moduleName;
+    this.iframeId = iframeId;
     this.searchBox = page.getByRole("combobox", { name: "Search" });
     this.searchButton = page
       .getByRole("button", { name: "Google Search" })
@@ -32,7 +39,7 @@ export class GooglePage {
 
   async selectModule() {
     await this.selectField.waitFor({ state: "visible", timeout: 10000 });
-    await this.selectField.selectOption("google_stable");
+    await this.selectField.selectOption(this.moduleName);
     await this.page.waitForTimeout(1000);
   }
 

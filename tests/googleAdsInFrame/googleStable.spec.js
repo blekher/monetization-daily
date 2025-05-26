@@ -1,16 +1,16 @@
 import { expect } from "@playwright/test";
-import { test} from './fixtures.js';
-import { GooglePage } from "../pages/googlePage.js";
-import { ExtensionsPage } from "../pages/extensionsPage.js";
-import { SearchResultsPage } from "../pages/searchResultsPage.js";
-import { takeFullPageScreenshot, saveNetworkLogs, saveIframeDetailsToFile } from "../utils/helpers.js";
-import { testData } from "./testData.js";
+import { test} from '../fixtures.js';
+import { GooglePage } from "../../pages/googlePage.js";
+import { ExtensionsPage } from "../../pages/extensionsPage.js";
+import { SearchResultsPage } from "../../pages/googleSearchResultsPage.js";
+import { takeFullPageScreenshot, saveNetworkLogs, saveIframeDetailsToFile } from "../../utils/helpers.js";
+import { testData } from "../testData.js";
 
 let googlePage, searchResultsPage, extensionsPage, networkLogs;
 
 test.describe("Testing Google stable module", () => {
   test.beforeEach(async ({ page }) => {
-    googlePage = new GooglePage(page);
+    googlePage = new GooglePage(page, "google_stable", "master22");
     searchResultsPage = new SearchResultsPage(page);
     extensionsPage = new ExtensionsPage(page);
     networkLogs = [];
@@ -41,7 +41,7 @@ test.describe("Testing Google stable module", () => {
       if (!isIframeValid) throw new Error("iframe#master22 failed validation on page 1");
 
       await searchResultsPage.logIframeDetails();
-      await saveIframeDetailsToFile(page, 'iframe-page-1.json');
+      await saveIframeDetailsToFile(page, 'iframe-page-1.json', 'master22');
       await takeFullPageScreenshot(page, testData.screenshots.page1);
     });
 
@@ -52,7 +52,7 @@ test.describe("Testing Google stable module", () => {
       if (!isIframeValid2) throw new Error("iframe#master22 failed validation on page 2");
 
       await searchResultsPage.logIframeDetails();
-      await saveIframeDetailsToFile(page, 'iframe-page-2.json');
+      await saveIframeDetailsToFile(page, 'iframe-page-2.json', 'master22');
       await takeFullPageScreenshot(page, testData.screenshots.page2);
     });
 

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import path from 'path';
-import { testData } from './testData.js';
-import { loadSnapshot, generateSnapshotReport } from '../utils/helpers.js';
+import { testData } from '../testData.js';
+import { loadSnapshot, generateSnapshotReport } from '../../utils/helpers.js';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 

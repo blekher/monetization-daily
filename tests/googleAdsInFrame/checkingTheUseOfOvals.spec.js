@@ -1,23 +1,23 @@
-import { test } from './fixtures.js';
+import { test } from '../fixtures.js';
 import { expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
-import { GooglePage } from '../pages/googlePage.js';
-import { SearchResultsPage } from '../pages/searchResultsPage.js';
-import { testData } from './testData.js';
+import { GooglePage } from '../../pages/googlePage.js';
+import { GoogleSearchResultsPage } from '../../pages/googleSearchResultsPage.js';
+import { testData } from '../testData.js';
 import {
   getIframeContent,
   extractAdsData,
   extractMatchingSearchResults,
   simulateHumanBehavior
-} from '../utils/helpers.js';
+} from '../../utils/helpers.js';
 
 test('Check the change in the search query after applying ovals.', { timeout: 120000 }, async ({ page }, testInfo) => {
   console.log('⏱ Test started...');
   const startTime = Date.now();
 
-  const googlePage = new GooglePage(page);
-  const searchResultsPage = new SearchResultsPage(page);
+  const googlePage = new GooglePage(page, "google_stable", "master22");
+  const googleSearchResultsPage = new GoogleSearchResultsPage(page);
 
 
   try {
@@ -25,7 +25,7 @@ test('Check the change in the search query after applying ovals.', { timeout: 12
       console.log('🌐 Navigating to Google...');
       await googlePage.navigate();
       console.log('🤖 Simulating human behavior...');
-      await simulateHumanBehavior(page);
+      // await simulateHumanBehavior(page);
     });
 
     await test.step('Perform Google search', async () => {
@@ -33,26 +33,26 @@ test('Check the change in the search query after applying ovals.', { timeout: 12
       await googlePage.selectModule();
       await googlePage.search(testData.searchQueryCarFlorida);
       await googlePage.waitForSearchResults();
-      await googlePage.closeLocationPopup();
+      // await googlePage.closeLocationPopup();
       console.log('✅ Search completed');
     });
 
     await test.step('Check iframe URL', async () => {
-      const raw = await searchResultsPage.getSearchParamsInUrl();
+      const raw = await googleSearchResultsPage.getSearchParamsInUrl();
       const decoded = decodeURIComponent(raw);
       expect(decoded).toBe(testData.searchQueryCarFlorida);
     });
 
     await test.step('Click first oval button', async () => {
-      await searchResultsPage.clickFirstOvalButton();
+      await googleSearchResultsPage.clickFirstOvalButton();
     });
 
     await test.step('Check change search request', async () => {
-      const searchBoxValue = await searchResultsPage.searchBox.inputValue();
+      const searchBoxValue = await googleSearchResultsPage.searchBox.inputValue();
       console.log('Текст в полі пошуку:', searchBoxValue);
     
       const newSearchRequest = `${searchBoxValue}`;
-      const raw = await searchResultsPage.getSearchParamsInUrl();
+      const raw = await googleSearchResultsPage.getSearchParamsInUrl();
       const decoded = decodeURIComponent(raw);
       expect(decoded).toBe(newSearchRequest);
     });
@@ -66,3 +66,6 @@ test('Check the change in the search query after applying ovals.', { timeout: 12
     console.log('✅ Test finished');
   }
 });
+
+
+
