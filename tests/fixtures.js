@@ -10,7 +10,7 @@ const extensionPath = path.resolve(__dirname, './monetization_test');
 // use this fixture in your tests
 export const test = base.extend({
   context: async ({}, use) => {
-    const context = await chromium.launchPersistentContext('./userData', {
+    const context = await chromium.launchPersistentContext('', {
       headless: false,
       args: [
         '--start-maximized',
