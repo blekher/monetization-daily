@@ -1,10 +1,9 @@
 import { expect } from '@playwright/test';
-
 export class YahooResultsPage {
   /**
    * @param {import('@playwright/test').Page} page
-   * @param {string} moduleName — наприклад "yahoo_stable"
-   * @param {string} iframeId — наприклад "privatelayer"
+   * @param {string} moduleName
+   * @param {string} iframeId
    */
   constructor(page, iframeId) {
     this.page = page;
@@ -152,4 +151,20 @@ export class YahooResultsPage {
     console.log(`- First iframe ID on page: ${firstIframeId}`);
     console.log(`- Is first: ${isFirst}`);
   }
+
+  async getSearchParamsInUrlYahoo() {
+    const iframeLocator = this.page.locator(`iframe#${this.iframeId}`);
+    const iframeSrc = await iframeLocator.getAttribute('src') || '';
+    const firstPart = iframeSrc.split('=')[3];
+    console.log('firstPart =', firstPart);
+    const searchParamsWithPlus = firstPart.split('&')[0];
+    const searchParams = searchParamsWithPlus.replace(/\+/g, ' ');
+    console.log('searchParams =', searchParams);
+    return searchParams;
+  }
 }
+
+
+// const input = "rent+car";
+// const output = input.replace(/\+/g, ' ');
+// console.log(output); // "rent car"

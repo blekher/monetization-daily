@@ -12,4 +12,8 @@ export const testData = {
     ariaPage1: "aria-page-1",
     ariaPage2: "aria-page-2",
   },
+  iframeId: {
+    googleIframe: "master22",
+    yahooIframe: "privatelayer",
+  }
 };
