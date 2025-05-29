@@ -7,11 +7,11 @@
   "title": null,
   "position": {
     "x": 90.5,
-    "y": 231
+    "y": 179
   },
   "size": {
     "width": 630,
-    "height": 938
+    "height": 1278
   },
   "styles": {
     "display": "block",
@@ -21,7 +21,7 @@
     "position": "absolute",
     "pointerEvents": "auto"
   },
-  "intersectionRatio": 0.52,
+  "intersectionRatio": 0.42,
   "firstIframeId": "privatelayer",
   "isFirst": false
 }

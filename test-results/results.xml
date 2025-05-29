@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="97.581587">
-<testsuite name="yahooAdsFrame/yahooEvents.spec.js" timestamp="2025-05-29T08:48:27.692Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="97.089" errors="0">
-<testcase name="Testing Yahoo system events with gradual query changes › C591 – Verification of sending Yahoo system events when editing the search query" classname="yahooAdsFrame/yahooEvents.spec.js" time="97.089">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="34.421431000000005">
+<testsuite name="yahooAdsFrame/yahooEvents.spec.js" timestamp="2025-05-29T12:04:29.590Z" hostname="Google Chrome" tests="1" failures="0" skipped="0" time="33.929" errors="0">
+<testcase name="Testing Yahoo system events with gradual query changes › C591 – Verification of sending Yahoo system events when editing the search query" classname="yahooAdsFrame/yahooEvents.spec.js" time="33.929">
 <system-out>
 <![CDATA[Element not visible within 10000ms, skipping click.
 ✅ Query "rent bike" found in Yahoo request

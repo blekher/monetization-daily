@@ -3,7 +3,7 @@ import { expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { GooglePage } from '../../pages/googlePage.js';
-import { SearchResultsPage } from '../../pages/searchResultsPage.js';
+import { GoogleSearchResultsPage } from '../../pages/googleSearchResultsPage.js';
 import { testData } from '../testData.js';
 import {
     getIframeContent,
