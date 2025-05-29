@@ -4,7 +4,6 @@ import fs from 'fs';
 import path from 'path';
 import { GooglePage } from '../../pages/googlePage.js';
 import { GoogleSearchResultsPage } from '../../pages/googleSearchResultsPage.js';
-import { YahooResultsPage } from "../../pages/yahooResultsPage.js";
 import { testData } from '../testData.js';
 import {
   getIframeContent,
@@ -13,12 +12,12 @@ import {
   simulateHumanBehavior
 } from '../../utils/helpers.js';
 
-test('C582 - Checking iframe URL changes after search query changes', { timeout: 120000 }, async ({ page }, testInfo) => {
+test('Checking the presence of monetization iframes on the "All" and "Web" tabs.', { timeout: 120000 }, async ({ page }, testInfo) => {
   console.log('⏱ Test started...');
   const startTime = Date.now();
 
   const googlePage = new GooglePage(page, 'yahoo_stable', 'privatelayer');
-  const yahooResultsPage = new YahooResultsPage(page, "privatelayer", "yahoo_stable");
+  const googleSearchResultsPage = new GoogleSearchResultsPage(page, 'privatelayer', 'yahoo_stable');
 
 
   try {
@@ -34,24 +33,26 @@ test('C582 - Checking iframe URL changes after search query changes', { timeout:
       await googlePage.selectModule();
       await googlePage.search(testData.searchQuery);
       await googlePage.waitForSearchResults();
-      // await googlePage.closeLocationPopup();
+      await googlePage.closeLocationPopup();
       console.log('✅ Search completed');
     });
 
-    await test.step('Check iframe URL', async () => {
-      const raw = await yahooResultsPage.getSearchParamsInUrlYahoo();
-      const decoded = decodeURIComponent(raw);
-      expect(decoded).toBe(testData.searchQuery);
+    await test.step('Validate frame in "all" tab', async () => {
+      await googleSearchResultsPage.validateIframe();
+      console.log('Validate frame in "all" tab passed');
     });
 
-    await test.step('Check change search request', async () => {
-      await googlePage.search(testData.searchQueryCar);
-      const raw = await yahooResultsPage.getSearchParamsInUrlYahoo();
-      const decoded = decodeURIComponent(raw);
-      expect(decoded).toBe(testData.searchQueryCar);
-      await expect(googlePage.searchBox).toHaveValue(testData.searchQueryCar);
+    await test.step('Validate frame in "web" tab', async () => {
+      await googleSearchResultsPage.clickMoreButton();
+      console.log('Click "more" button');
+
+      await googleSearchResultsPage.clickWebButton();
+      console.log('Click web button');
+      expect(await googleSearchResultsPage.getCurrentPageType()).toBe('Web');
+
+      await googleSearchResultsPage.validateIframe();
+      console.log('Validate frame in "web" tab passed');
     });
-    
 
   } catch (error) {
     console.error('❌ Test failed:', error);
