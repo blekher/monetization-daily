@@ -24,18 +24,82 @@ export class GoogleSearchResultsPage {
     this.firstOvalButton = page.locator('[role="list"]').nth(1).locator('[role="listitem"] a').first();
     this.searchBox = page.getByRole("combobox", { name: "Search" });
     this.googlePage = new GooglePage(page, "google_stable", "master22");
+    // this.adsTitle = page.locator('a.styleable-title');
+    // this.adsTitle = page.locator('.styleable-title.a').first();
+    // this.adsTitle = page.frameLocator(`iframe#${this.iframeId}`)
+    //               .locator('a.styleable-title').first();
+    this.frame = page.frameLocator(`iframe#${iframeId}`);
+
   }
 
-  async initAdsTitleLocator() {
-    for (const frame of this.page.frames()) {
-      const locator = frame.locator('.styleable-title.a');
-      if (await locator.count() > 0) {
-        this.adsTitleLocator = locator.first();
-        return;
-      }
-    }
-    throw new Error('Not found .styleable-title.a in any frame');
+
+  get _adsFrame() {
+    return this.page.frameLocator(`iframe#${this.iframeId}`);
   }
+  // внутрішній iframe всередині master22
+  get _innerAdsFrame() {
+    return this._adsFrame.frameLocator(`iframe[src*="https://todonto.com"]`);
+  }
+
+  /** Навести курсор на перший p.favicon-title */
+  async hoverOnFaviconTitle() {
+    const target = this._innerAdsFrame.locator('p.favicon-title').first();
+    await target.waitFor({ state: 'visible', timeout: 10_000 });
+    await target.scrollIntoViewIfNeeded();
+    await target.hover({ force: true });
+  }
+
+  /** Перевірити, що перший a.styleable-title став underline */
+  async expectStyleableLinkUnderlined() {
+    const link = this._innerAdsFrame.locator('a.styleable-title').first();
+    await link.waitFor({ state: 'visible', timeout: 5_000 });
+    // вичитуємо прямо властивість textDecorationLine
+    const decoration = await link.evaluate(el =>
+      window.getComputedStyle(el).textDecorationLine
+    );
+    expect(decoration).toBe('underline');
+  }
+
+
+
+
+  ///////////////////////////////////////////////////////////
+  // async initAdsTitleLocator() {
+  //   for (const frame of this.page.frames()) {
+  //     const locator = frame.locator('.favicon-title');
+  //     if (await locator.count() > 0) {
+  //       this.adsTitleLocator = locator.first();
+  //       return;
+  //     }
+  //   }
+  //   throw new Error('Not found .styleable-title.a in any frame');
+  // }
+
+
+  /////////////////////////////////////////////////////////////////////
+  // async initAdsTitleLocator() {
+  //   for (const frame of this.page.frames()) {
+  //     const locator = frame.locator('p.favicon-title');
+  //     if (await locator.count() > 0) {
+  //       this.adsTitleLocator = locator.first();
+  //       return;
+  //     }
+  //   }
+  //   throw new Error('Not found title locator in frame');
+  // }
+/////////////////////////////////////////////////////////////////////////
+
+//   get adsTitleLink() {
+//   return this.page.frameLocator(`iframe#${this.iframeId}`)
+//                   .locator('a.styleable-title').first();
+// }
+
+// async hoverAdsTitle() {
+//   const link = this.adsTitleLink;
+//   await link.waitFor({ state: 'visible', timeout: 20000 });
+//   await link.hover();
+// }
+  /////////////////////////////////////////////////////////////////////
 
   async initAdsFaviconLocator() {
     for (const frame of this.page.frames()) {
@@ -48,6 +112,8 @@ export class GoogleSearchResultsPage {
     throw new Error('Not found div.favicon-background in any frame');
   }
 
+  //////////////////////////////////////////////////////////////////////
+
   async initAdsFaviconTitleLocator() {
     for (const frame of this.page.frames()) {
       const locator = frame.locator('p.favicon-title');
@@ -58,6 +124,8 @@ export class GoogleSearchResultsPage {
     }
     throw new Error('Not found p.favicon-title in any frame');
   }
+
+  //////////////////////////////////////////////////////////////////////
 
   async initAdsFaviconDomainLocator() {
     for (const frame of this.page.frames()) {
@@ -70,53 +138,70 @@ export class GoogleSearchResultsPage {
     throw new Error('Not found .favicon-domain in any frame');
   }
 
-  async hoverAdsTitle() {
-    for (const frame of this.page.frames()) {
-    if (!this.adsTitleLocator) {
-      await this.initAdsTitleLocator();
-    }
-    await this.adsTitleLocator.waitFor({ state: 'visible', timeout: 20000 });
-    await this.adsTitleLocator.hover();
-    await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
-  }
-    throw new Error('Error hover to title');
-  }
+  //////////////////////////////////////////////////////////////////////
+
+  // async hoverAdsTitle() {
+  //   for (const frame of this.page.frames()) {
+  //   if (!this.adsTitleLocator) {
+  //     await this.initAdsTitleLocator();
+  //   }
+  //   await this.adsTitleLocator.waitFor({ state: 'visible', timeout: 20000 });
+  //   await this.adsTitleLocator.hover();
+  //   // await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
+  // }
+  //   throw new Error('Error hover to title');
+  // }
+
+  // async hoverAdsTitle() {
+  //   await this.initAdsTitleLocator();
+  //   await this.adsTitleLocator.waitFor({ state: 'visible', timeout: 20000 });
+  //   await this.adsTitleLocator.hover();
+  // }
+
+  ////////////////////////////////////////////////////////////////////////////
 
   async hoverAdsFavicon() {
     for (const frame of this.page.frames()) {
-    if (!this.adsFaviconLocator) {
-      await this.initAdsFaviconLocator();
+      if (!this.adsFaviconLocator) {
+        await this.initAdsFaviconLocator();
+      }
+      await this.adsFaviconLocator.waitFor({ state: 'visible', timeout: 20000 });
+      await this.adsFaviconLocator.hover();
+      await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
     }
-    await this.adsFaviconLocator.waitFor({ state: 'visible', timeout: 20000 });
-    await this.adsFaviconLocator.hover();
-    await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
-  }
     throw new Error('Error hover to Favicon');
   }
 
+  ///////////////////////////////////////////////////////////////////////////
+
   async hoverAdsFaviconTitle() {
     for (const frame of this.page.frames()) {
-    if (!this.adsFaviconTitleLocator) {
-      await this.initAdsFaviconTitleLocator();
+      if (!this.adsFaviconTitleLocator) {
+        await this.initAdsFaviconTitleLocator();
+      }
+      await this.adsFaviconTitleLocator.waitFor({ state: 'visible', timeout: 20000 });
+      await this.adsFaviconTitleLocator.hover();
+      await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
     }
-    await this.adsFaviconTitleLocator.waitFor({ state: 'visible', timeout: 20000 });
-    await this.adsFaviconTitleLocator.hover();
-    await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
-  }
     throw new Error('Error hover to Favicon title');
   }
 
+  ///////////////////////////////////////////////////////////////////////////
+
   async hoverAdsFaviconDomain() {
     for (const frame of this.page.frames()) {
-    if (!this.adsFaviconDomainLocator) {
-      await this.initAdsFaviconDomainLocator();
+      if (!this.adsFaviconDomainLocator) {
+        await this.initAdsFaviconDomainLocator();
+      }
+      await this.adsFaviconDomainLocator.waitFor({ state: 'visible', timeout: 20000 });
+      await this.adsFaviconDomainLocator.hover();
+      await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
     }
-    await this.adsFaviconDomainLocator.waitFor({ state: 'visible', timeout: 20000 });
-    await this.adsFaviconDomainLocator.hover();
-    await expect(this.adsTitleLocator).toHaveCSS('text-decoration-line', 'underline', { timeout: 5000 });
-  }
     throw new Error('Error hover to Favicon domain');
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async clickMoreButton() {
     try {
@@ -138,7 +223,7 @@ export class GoogleSearchResultsPage {
     }
   };
 
-  async frameIsMissing() { 
+  async frameIsMissing() {
     try {
       await expect(this.page.locator(`iframe#${this.iframeId}`)).toHaveCount(0);
       console.log(`iframe#${this.iframeId} is not found in any other tabs`);
@@ -292,35 +377,32 @@ export class GoogleSearchResultsPage {
       return false;
     }
   }
-//////////////////////////////////////////////////////
 
-async getCurrentPageType() {
+  async getCurrentPageType() {
     const url = await this.page.url();
     const params = new URLSearchParams(new URL(url).search);
     const tbm = params.get('tbm');
     const udm = params.get('udm');
 
     switch (tbm) {
-      case 'nws':  return 'News';
-      case 'vid':  return 'Videos';
-      case 'bks':  return 'Books';
-      case 'lcl':  return 'Locations';
+      case 'nws': return 'News';
+      case 'vid': return 'Videos';
+      case 'bks': return 'Books';
+      case 'lcl': return 'Locations';
       case 'shop': return 'Shopping';
       default:
         switch (udm) {
-          case '2':  return 'Images';
-          case '7':  return 'Videos';
-          case '8':  return 'Jobs';
+          case '2': return 'Images';
+          case '7': return 'Videos';
+          case '8': return 'Jobs';
           case '14': return 'Web';
           case '18': return 'Forums';
           case '28': return 'Shopping';
           case '36': return 'Books';
-          default:   return 'All';
+          default: return 'All';
         }
     }
   }
-
-///////////////////////////////////////////////////////////////
 
   async logIframeMetrics() {
     const iframe = this.page.locator(`iframe#${this.iframeId}`);
@@ -410,6 +492,4 @@ async getCurrentPageType() {
     console.log(`- First iframe ID on page: ${firstIframeId}`);
     console.log(`- Is first: ${isFirst}`);
   }
-
-
 }

@@ -12,12 +12,12 @@ import {
   simulateHumanBehavior
 } from '../../utils/helpers.js';
 
-test('Checking the presence of monetization iframes on the "All" and "Web" tabs.', { timeout: 120000 }, async ({ page }, testInfo) => {
+test('Check hover on ads', { timeout: 120000 }, async ({ page }, testInfo) => {
     console.log('⏱ Test started...');
     const startTime = Date.now();
   
-    const googlePage = new GooglePage(page, 'google_stable', 'master22');
-    const googleSearchResultsPage = new GoogleSearchResultsPage(page, 'master22', 'google_stable');
+    const googlePage = new GooglePage(page, 'yahoo_stable', 'privatelayer');
+    const searchResultsPage = new SearchResultsPage(page);
 
   
     try {
@@ -25,7 +25,7 @@ test('Checking the presence of monetization iframes on the "All" and "Web" tabs.
             console.log('🌐 Navigating to Google...');
             await googlePage.navigate();
             console.log('🤖 Simulating human behavior...');
-            // await simulateHumanBehavior(page);
+            await simulateHumanBehavior(page);
           });
 
           await test.step('Perform Google search', async () => {
@@ -38,17 +38,18 @@ test('Checking the presence of monetization iframes on the "All" and "Web" tabs.
           });
 
 /////////////////////////////////////////////
-await googleSearchResultsPage.validateIframe();
-console.log('Validate frame in "all" tab passed');
 
-await googleSearchResultsPage.clickMoreButton();
-console.log('Click "more" button');
+      await searchResultsPage.hoverAdsTitle();
+      console.log('test Hover title passed!')
 
-await googleSearchResultsPage.clickWebButton();
-console.log('Click web button');
+      await searchResultsPage.hoverAdsFavicon();
+      console.log('test Hover favicon passed!')
 
-await googleSearchResultsPage.validateIframe();
-console.log('Validate frame in "web" tab passed');      
+      await searchResultsPage.hoverAdsFaviconTitle();
+      console.log('test Hover favicon title passed!')
+
+      await searchResultsPage.hoverAdsFaviconDomain();
+      console.log('test Hover favicon domain passed!')
 
 /////////////////////////////////////////
 
