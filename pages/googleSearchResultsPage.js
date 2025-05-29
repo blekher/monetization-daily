@@ -2,9 +2,14 @@ import { expect } from '@playwright/test';
 import { waitAndClick } from '../utils/helpers.js';
 import { GooglePage } from "./googlePage.js";
 export class GoogleSearchResultsPage {
-  constructor(page) {
+  /**
+   * @param {import('@playwright/test').Page} page
+   * @param {string} moduleName
+   * @param {string} iframeId
+   */
+  constructor(page, iframeId) {
     this.page = page;
-    // this.iframe = page.locator("iframe#master22");
+    this.iframeId = iframeId;
     this.moreButton = page.locator('g-popup:has-text("More")');
     // this.webButton = page.locator('g-popup:visible >> text=Web');
     this.webButton = page.getByRole("link", { name: "Web" }).first();
@@ -18,7 +23,7 @@ export class GoogleSearchResultsPage {
     this.videosButton = page.getByRole("link", { name: "Videos" }).first();
     this.firstOvalButton = page.locator('[role="list"]').nth(1).locator('[role="listitem"] a').first();
     this.searchBox = page.getByRole("combobox", { name: "Search" });
-    this.googlePage = new GooglePage(page);
+    this.googlePage = new GooglePage(page, "google_stable", "master22");
   }
 
   async initAdsTitleLocator() {
@@ -115,9 +120,6 @@ export class GoogleSearchResultsPage {
 
   async clickMoreButton() {
     try {
-      // await this.moreButton.waitFor({ state: 'attached' });
-      // await this.moreButton.waitFor({ state: 'visible' });
-      // await waitAndClick(this.moreButton, 10000);
       if (await this.moreButton.isVisible()) {
         await waitAndClick(this.moreButton);
       }
@@ -136,13 +138,13 @@ export class GoogleSearchResultsPage {
     }
   };
 
-  async frameIsMissing() {
+  async frameIsMissing() { 
     try {
-      await expect(this.page.locator('iframe#master22')).toHaveCount(0);
-      console.log("iframe#master22 is not found in any other tabs");
+      await expect(this.page.locator(`iframe#${this.iframeId}`)).toHaveCount(0);
+      console.log(`iframe#${this.iframeId} is not found in any other tabs`);
       return true;
     } catch {
-      console.error("iframe#master22 found");
+      console.error(`iframe#${this.iframeId} found`);
       return false;
     }
   }
@@ -164,10 +166,6 @@ export class GoogleSearchResultsPage {
       this.page.goBack(),
     ]);
   }
-
-  // async backToSearchResult() {
-  //   await this.page.goBack();
-  // };
 
   async goForwardInHistory() {
     await Promise.all([
@@ -264,7 +262,7 @@ export class GoogleSearchResultsPage {
   };
 
   async getSearchParamsInUrl() {
-    const iframeLocator = this.page.locator("iframe#master22");
+    const iframeLocator = this.page.locator(`iframe#${this.iframeId}`);
     const iframeSrc = await iframeLocator.getAttribute('src') || '';
     const firstPart = iframeSrc.split('=')[1];
     console.log('firstPart =', firstPart);
@@ -275,7 +273,7 @@ export class GoogleSearchResultsPage {
 
   async validateIframe() {
     try {
-      const iframeLocator = this.page.locator("iframe#master22");
+      const iframeLocator = this.page.locator(`iframe#${this.iframeId}`);
 
       await iframeLocator.waitFor({ state: "attached" });
       await iframeLocator.waitFor({ state: "visible" });
@@ -283,14 +281,14 @@ export class GoogleSearchResultsPage {
       const firstIframe = this.page.locator("iframe").first();
       const firstIframeId = await firstIframe.getAttribute("id");
 
-      if (firstIframeId !== "master22") {
-        throw new Error("iframe#master22 is not the first iframe");
+      if (firstIframeId !== `${this.iframeId}`) {
+        throw new Error(`iframe#${this.iframeId} is not the first iframe`);
       }
 
-      console.log("iframe#master22 is visible and is the first iframe");
+      console.log(`iframe#${this.iframeId} is visible and is the first iframe`);
       return true;
     } catch {
-      console.error("iframe#master22 not found, not visible, or not first");
+      console.error(`iframe#${this.iframeId} not found, not visible, or not first`);
       return false;
     }
   }
@@ -325,7 +323,7 @@ async getCurrentPageType() {
 ///////////////////////////////////////////////////////////////
 
   async logIframeMetrics() {
-    const iframe = this.page.locator("iframe#master22");
+    const iframe = this.page.locator(`iframe#${this.iframeId}`);
 
     await iframe.waitFor({ state: "attached" });
     await iframe.waitFor({ state: "visible" });
@@ -337,11 +335,11 @@ async getCurrentPageType() {
       console.log(`- Position: (x: ${box.x}, y: ${box.y})`);
       console.log(`- Size: width: ${box.width}px, height: ${box.height}px`);
     } else {
-      console.warn("Unable to get bounding box for iframe#master22");
+      console.warn(`Unable to get bounding box for iframe#${this.iframeId}`);
     }
   }
   async logIframeDetails() {
-    const iframe = this.page.locator('iframe#master22');
+    const iframe = this.page.locator(`iframe#${this.iframeId}`);
 
     // Wait for iframe to be attached and visible
     await iframe.waitFor({ state: 'attached' });
@@ -384,11 +382,11 @@ async getCurrentPageType() {
     }, elementHandle);
 
     // Check if iframe is first on the page
-    const firstIframeId = await this.page.locator('iframe').first().getAttribute('id');
-    const isFirst = firstIframeId === 'master22';
+    const firstIframeId = await this.page.locator(`${this.iframeId}`).first().getAttribute('id');
+    const isFirst = firstIframeId === `${this.iframeId}`;
 
     // Output all collected information
-    console.log('iframe#master22 details:');
+    console.log(`iframe#${this.iframeId} details:`);
     console.log(`- src: ${src}`);
     console.log(`- sandbox: ${sandbox}`);
     console.log(`- referrerpolicy: ${referrerPolicy}`);
