@@ -1,0 +1,27 @@
+{
+  "src": "https://search.yahoo.com/yhs/search;_ylt=Awrirs_ZqjZo6gEAo0IPxQt.;_ylu=Y29sbwNiZjEEcG9zAzEEdnRpZAMEc2VjA3BhZ2luYXRpb24-?hspart=iba&hsimp=yhs-syn_apollo&param2=9dUI1n2R0BLDxNuWfiP4aSFOTltNdSPoIx38%2BUf%2FiXrvPdoGmStdlfwLFZYDvqkAJrWWk4yNReCLnBD%2FqPsDZd7olTZcV8HMx1G%2Fk786sE2Tis1g8dJd8zxVWs%2BbKztBnq1TfqUiqPYK9pXifXmJFyorDuCsYXJE71Y6G5tfejCPXQh4U%2BM00wh%2FIOnb0YedxiaEvimqt%2BlTjW7J1782IIb89QI2252qdF1VwW%2Fcr33VPwsB9yYpU506GP2eyDlSr0FqIo8t97rmEYYpekAnBVrDFrujhGIm9fcvYUyFRo0%3D&param3=HpCyCT2cXaKG4CVDR00rqgObRQahimQNt2d5ZCR7Jy1wuCpOdfFXWEmSMsPzfHBG%2FUjyYRTjeqxW66isKIUKcMldQduBFZDJ24bBdV0f3%2BkTRY4%2Bewos9mtuzykU71dtM%2Bhbw62mgKk0%2FxzR7TjzQ0Ox53H39ciot7Iu%2F7%2FzfFXx1TKa4OKSmH7I%2Fnhqm5Vlu4Pp8jr6Okz3q%2BqjH2AiGMs%2BE7532MzgCdZAbg%2F1orZnOflkaNiYB7DUZMsutPDAZg3bdm2T8O0oljQl0D0m43i35ZspV8nOqQsjh0svVkY%3D&type=f2%3A%3B.6850610d4680680b2811f3dcdca6be379af%3B5.ac48528f9511b625d52a8ef8e64166f19c0ca9cd289975659b0570f139cfd1da05e084af6b3ead9e24c4d83e1&p=rent+bike&fr=yhs-iba-syn_apollo&b=6&pz=5&bct=0&xargs=0",
+  "sandbox": null,
+  "referrerPolicy": "no-referrer",
+  "allow": null,
+  "className": null,
+  "title": null,
+  "position": {
+    "x": 90.5,
+    "y": 219
+  },
+  "size": {
+    "width": 630,
+    "height": 680
+  },
+  "styles": {
+    "display": "block",
+    "visibility": "visible",
+    "opacity": "1",
+    "zIndex": "10",
+    "position": "absolute",
+    "pointerEvents": "auto"
+  },
+  "intersectionRatio": 0.74,
+  "firstIframeId": "privatelayer",
+  "isFirst": false
+}

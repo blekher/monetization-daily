@@ -1,0 +1,27 @@
+{
+  "src": "https://search.securyconnection.com/search/?tkn=8444iw&tid=46338&q=rent%20bike",
+  "sandbox": null,
+  "referrerPolicy": "no-referrer",
+  "allow": null,
+  "className": null,
+  "title": null,
+  "position": {
+    "x": 90.5,
+    "y": 231
+  },
+  "size": {
+    "width": 630,
+    "height": 938
+  },
+  "styles": {
+    "display": "block",
+    "visibility": "visible",
+    "opacity": "1",
+    "zIndex": "10",
+    "position": "absolute",
+    "pointerEvents": "auto"
+  },
+  "intersectionRatio": 0.52,
+  "firstIframeId": "privatelayer",
+  "isFirst": false
+}
