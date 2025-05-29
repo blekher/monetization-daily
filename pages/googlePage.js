@@ -84,8 +84,15 @@ export class GooglePage {
   }
 
   async waitForSearchResults() {
-    await this.page.waitForLoadState("load");
-    await this.page.waitForTimeout(2000);
+    try {
+      // Чекаємо поки пошукове поле знову стане доступним
+      await this.searchBox.waitFor({ state: 'visible', timeout: 10000 });
+      // Додаткова перевірка, що сторінка відкрита
+      await this.page.waitForTimeout(1000);
+    } catch (error) {
+      console.error("Error waiting for search results:", error);
+      throw error;
+    }
   }
 
   async goToSearchPage(n = 2) {
@@ -93,5 +100,45 @@ export class GooglePage {
     await expect(pageLink).toBeVisible({ timeout: 10000 });
     await pageLink.click();
     await this.page.waitForLoadState("load");
+  }
+
+  async editSearchQuery(newQuery) {
+    try {
+      // Очікуємо поки пошуковий рядок стане видимим
+      await this.searchBox.waitFor({ state: 'visible', timeout: 10000 });
+      
+      // Очищаємо поточний запит
+      await this.searchBox.click();
+      await this.searchBox.fill("");
+      await this.page.waitForTimeout(500);
+
+      // Вводимо новий запит
+      await this.searchBox.fill(newQuery);
+      await this.page.waitForTimeout(500);
+
+      // Натискаємо Enter і очікуємо навігації
+      await Promise.all([
+        this.page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+        this.searchBox.press('Enter'),
+      ]);
+    } catch (error) {
+      console.error("Error during search query editing:", error);
+      throw error;
+    }
+  }
+
+  async appendToSearchQuery(suffix) {
+    try {
+      await this.searchBox.waitFor({ state: 'visible', timeout: 10000 });
+      await this.searchBox.click();
+      await this.searchBox.type(suffix);
+      await this.page.waitForTimeout(500);
+      await this.searchBox.press('Enter');
+      await this.page.waitForLoadState('networkidle');
+      await this.waitForSearchResults();
+    } catch (error) {
+      console.error("Error during appending to search query:", error);
+      throw error;
+    }
   }
 }

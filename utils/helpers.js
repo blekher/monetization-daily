@@ -51,7 +51,13 @@ export async function takeFullPageScreenshot(page, name) {
  * Saves network logs to a file
  */
 export function saveNetworkLogs(logs, filename = "./network_requests.log") {
-  const logText = logs.join("\n");
+  const dir = path.dirname(filename);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  const logText = Array.isArray(logs)
+    ? logs.map(l => typeof l === 'string' ? l : JSON.stringify(l)).join("\n")
+    : logs;
   fs.writeFileSync(filename, logText, "utf-8");
   console.log(`Network logs saved to: ${filename}`);
 }
